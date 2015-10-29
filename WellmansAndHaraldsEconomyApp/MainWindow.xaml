@@ -1,0 +1,58 @@
+﻿<Window x:Class="WellmansAndHaraldsEconomyApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="F's &amp; H's Economy App" Height="768" Width="1024"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0">
+            <TextBlock>Previous months</TextBlock>
+            <ListBox SelectedItem="{Binding SelectedMonthData}" ItemsSource="{Binding PreviousMonthData}"/>
+            <Button Click="ViewMonthButton_Click">View</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <TextBox FontSize="22" FontWeight="Bold">Wellman</TextBox>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left">Rent</TextBlock>
+                <TextBox DockPanel.Dock="Right" Text="{Binding Rent}"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left">HGF</TextBlock>
+                <TextBox DockPanel.Dock="Right" Text="{Binding HGF}"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left">Home insurance</TextBlock>
+                <TextBox DockPanel.Dock="Right" Text="{Binding Insurance}"/>
+            </DockPanel>
+            <TextBlock FontWeight="Bold">Receipts</TextBlock>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left">Description</TextBlock>
+                <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.Description}"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left">Value</TextBlock>
+                <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.Value}"/>
+            </DockPanel>
+            <Button Click="AddWellmanReceiptButton_Click">Add</Button>
+            <ListBox SelectedItem="{Binding SelectedWellmanReceipt}" ItemsSource="{Binding WellmanReceipts}"/>
+            <Button Click="RemoveWellmanReceiptButton_Click">Remove</Button>
+            <TextBlock FontWeight="Bold">Harald's debts</TextBlock>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left">Description</TextBlock>
+                <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldDebt.Description}"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left">Value</TextBlock>
+                <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldDebt.Value}"/>
+            </DockPanel>
+            <Button Click="AddWellmanReceiptButton_Click">Add</Button>
+            <ListBox SelectedItem="{Binding SelectedHaraldDebt}" ItemsSource="{Binding HaraldDebts}"/>
+            <Button Click="RemoveWellmanReceiptButton_Click">Remove</Button>
+        </StackPanel>
+    </Grid>
+</Window>
