@@ -15,7 +15,7 @@
             <GroupBox Header="Current month">
                 <StackPanel>
                     <DockPanel>
-                        <ComboBox DockPanel.Dock="Left" Width="150" SelectedIndex="{Binding CurrentMonth}">
+                        <ComboBox DockPanel.Dock="Left" Width="150" SelectedIndex="{Binding CurrentMonthData.CurrentMonth}">
                             <ComboBoxItem>Jan</ComboBoxItem>
                             <ComboBoxItem>Feb</ComboBoxItem>
                             <ComboBoxItem>Mar</ComboBoxItem>
@@ -29,11 +29,11 @@
                             <ComboBoxItem>Nov</ComboBoxItem>
                             <ComboBoxItem>Dec</ComboBoxItem>
                         </ComboBox>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding CurrentYear}"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMonthData.CurrentYear}"/>
                     </DockPanel>
                     
                     <TextBlock>Harald owes Wellman</TextBlock>
-                    <TextBlock Text="{Binding ResultValue, StringFormat='{}{0:c}', FallbackValue='0,00 kr'}"/>
+                    <TextBlock Text="{Binding CurrentMonthData.ResultValue, StringFormat='{}{0:c}', FallbackValue='0,00 kr'}"/>
                     <Button Click="SaveButton_Click">Save</Button>
                 </StackPanel>
             </GroupBox>
@@ -51,15 +51,15 @@
                 <StackPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left">Rent</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding Rent}"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMonthData.Rent}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left">HGF</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding HGF}"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMonthData.HGF}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left">Home insurance</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding Insurance}"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMonthData.Insurance}"/>
                     </DockPanel>
                 </StackPanel>
             </GroupBox>
@@ -75,7 +75,7 @@
                         <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.Value}"/>
                     </DockPanel>
                     <Button Click="AddWellmanReceiptButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedWellmanReceipt}" ItemsSource="{Binding WellmanReceipts}"/>
+                    <ListBox SelectedItem="{Binding SelectedWellmanReceipt}" ItemsSource="{Binding CurrentMonthData.WellmanReceipts}"/>
                     <Button Click="RemoveWellmanReceiptButton_Click">Remove</Button>
                 </StackPanel>
             </GroupBox>
@@ -90,7 +90,7 @@
                         <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldDebt.Value}"/>
                     </DockPanel>
                     <Button Click="AddHaraldDebtButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedHaraldDebt}" ItemsSource="{Binding HaraldDebts}"/>
+                    <ListBox SelectedItem="{Binding SelectedHaraldDebt}" ItemsSource="{Binding CurrentMonthData.HaraldDebts}"/>
                     <Button Click="RemoveHaraldDebtButton_Click">Remove</Button>
                 </StackPanel>
             </GroupBox>
@@ -102,11 +102,11 @@
                 <StackPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left">Broadband</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding Broadband}"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMonthData.Broadband}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left">Electricity</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding Electricity}"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMonthData.Electricity}"/>
                     </DockPanel>
                 </StackPanel>
             </GroupBox>
@@ -122,7 +122,7 @@
                         <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.Value}"/>
                     </DockPanel>
                     <Button Click="AddHaraldReceiptButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedHaraldReceipt}" ItemsSource="{Binding HaraldReceipts}"/>
+                    <ListBox SelectedItem="{Binding SelectedHaraldReceipt}" ItemsSource="{Binding CurrentMonthData.HaraldReceipts}"/>
                     <Button Click="RemoveHaraldReceiptButton_Click">Remove</Button>
                 </StackPanel>
             </GroupBox>
@@ -138,7 +138,7 @@
                         <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanDebt.Value}"/>
                     </DockPanel>
                     <Button Click="AddWellmanDebtButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedWellmanDebt}" ItemsSource="{Binding WellmanDebts}"/>
+                    <ListBox SelectedItem="{Binding SelectedWellmanDebt}" ItemsSource="{Binding CurrentMonthData.WellmanDebts}"/>
                     <Button Click="RemoveWellmanDebtButton_Click">Remove</Button>
                 </StackPanel>
             </GroupBox>
