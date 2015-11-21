@@ -37,38 +37,6 @@ namespace WellmansAndHaraldsEconomyApp
 
             PreviousMonthData = new ObservableCollection<MonthData>();
 
-            var saveDir = new DirectoryInfo(m_SaveDir);
-            if (saveDir.Exists)
-            {
-                List<string> invalidFiles = new List<string>();
-                foreach (var file in saveDir.EnumerateFiles())
-                {
-                    using (var reader = file.OpenText())
-                    {
-                        var monthData = MonthData.Parse(reader);
-                        if (monthData != null)
-                        {
-                            PreviousMonthData.Add(monthData);
-                        }
-                        else
-                        {
-                            invalidFiles.Add(file.Name);
-                        }
-                    }
-                }
-                if (invalidFiles.Count > 0)
-                {
-                    var sb = new StringBuilder();
-                    sb.AppendLine("The following files contain invalid data:");
-                    foreach (var fileName in invalidFiles)
-                        sb.AppendLine(fileName);
-                    sb.AppendLine();
-                    sb.AppendLine("Consider deleting.");
-
-                    MessageBox.Show(sb.ToString(), "Invalid files found", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-
             InitializeComponent();
         }
 
@@ -188,15 +156,70 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            PreviousMonthData.Add(CurrentMonthData);
-
-            Directory.CreateDirectory(m_SaveDir);
-            using (var writer = new StreamWriter(Path.Combine(m_SaveDir, string.Format("file{0}-{1}", CurrentMonthData.CurrentYear, CurrentMonthData.CurrentMonth + 1))))
+            bool goAhead = true;
+            var oldData = PreviousMonthData.SingleOrDefault(x => x.CurrentMonth == CurrentMonthData.CurrentMonth && x.CurrentYear == CurrentMonthData.CurrentYear);
+            if (oldData != null)
             {
-                writer.Write(CurrentMonthData.GetSaveString());
+                var result = MessageBox.Show("Do you want to overwrite the old data for this month?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                    PreviousMonthData.Remove(oldData);
+                else
+                    goAhead = false;
             }
 
-            CurrentMonthData = new MonthData();
+            if (goAhead)
+            {
+                PreviousMonthData.Add(CurrentMonthData);
+
+                Directory.CreateDirectory(m_SaveDir);
+                using (var writer = new StreamWriter(Path.Combine(m_SaveDir, string.Format("file{0}-{1}", CurrentMonthData.CurrentYear, CurrentMonthData.CurrentMonth + 1))))
+                {
+                    writer.Write(CurrentMonthData.GetSaveString());
+                }
+
+                CurrentMonthData = new MonthData();
+            }
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            var saveDir = new DirectoryInfo(m_SaveDir);
+            if (saveDir.Exists)
+            {
+                List<string> invalidFiles = new List<string>();
+                foreach (var file in saveDir.EnumerateFiles())
+                {
+                    using (var reader = file.OpenText())
+                    {
+                        var monthData = MonthData.Parse(reader);
+                        if (monthData != null)
+                        {
+                            PreviousMonthData.Add(monthData);
+                        }
+                        else
+                        {
+                            invalidFiles.Add(file.Name);
+                        }
+                    }
+                }
+                if (invalidFiles.Count > 0)
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine("The following files contain invalid data:");
+                    foreach (var fileName in invalidFiles)
+                        sb.AppendLine(fileName);
+                    sb.AppendLine();
+                    sb.AppendLine("Would you like to delete them?");
+
+                    if (MessageBox.Show(sb.ToString(), "Invalid files found", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        foreach (var fileName in invalidFiles)
+                        {
+                            File.Delete(Path.Combine(m_SaveDir, fileName));
+                        }
+                    }
+                }
+            }
         }
     }
 }
