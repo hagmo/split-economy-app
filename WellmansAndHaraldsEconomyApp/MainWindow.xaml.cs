@@ -221,5 +221,10 @@ namespace WellmansAndHaraldsEconomyApp
                 }
             }
         }
+
+        public void Textbox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            (sender as TextBox).SelectAll();
+        }
     }
 }

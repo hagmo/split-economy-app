@@ -4,6 +4,13 @@
         Title="Fredrik's &amp; Harald's Economy App" Height="600" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Initialized="Window_Initialized">
+    
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <EventSetter Event="GotFocus" Handler="Textbox_GotFocus"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
