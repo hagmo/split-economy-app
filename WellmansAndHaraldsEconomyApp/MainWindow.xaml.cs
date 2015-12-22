@@ -226,5 +226,10 @@ namespace WellmansAndHaraldsEconomyApp
         {
             (sender as TextBox).SelectAll();
         }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMonthData = new MonthData();
+        }
     }
 }

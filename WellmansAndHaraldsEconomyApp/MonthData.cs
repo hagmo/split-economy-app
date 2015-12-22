@@ -200,6 +200,7 @@ namespace WellmansAndHaraldsEconomyApp
         }
         #endregion
 
+        #region saveload
         public string GetSaveString()
         {
             var sb = new StringBuilder();
@@ -314,6 +315,7 @@ namespace WellmansAndHaraldsEconomyApp
             }
             return monthData;
         }
+        #endregion
 
         public override string ToString()
         {
