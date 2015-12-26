@@ -121,19 +121,21 @@ namespace WellmansAndHaraldsEconomyApp
 
                 foreach (var item in WellmanReceipts)
                 {
-                    result += item.Value / 2d;
+                    result += item.SplitAmount / 2d;
+                    result += item.OtherAmount;
                 }
                 foreach (var item in HaraldDebts)
                 {
-                    result += item.Value;
+                    result += item.TotalValue;
                 }
                 foreach (var item in HaraldReceipts)
                 {
-                    result -= item.Value / 2d;
+                    result -= item.SplitAmount / 2d;
+                    result -= item.OtherAmount;
                 }
                 foreach (var item in WellmanDebts)
                 {
-                    result -= item.Value;
+                    result -= item.TotalValue;
                 }
                 return result;
             }
@@ -219,25 +221,25 @@ namespace WellmansAndHaraldsEconomyApp
             sb.AppendLine("[HaraldReceipts]");
             foreach (var item in HaraldReceipts)
             {
-                sb.AppendFormat("{0}={1}", item.Description, item.Value);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
                 sb.AppendLine();
             }
             sb.AppendLine("[HaraldDebts]");
             foreach (var item in HaraldDebts)
             {
-                sb.AppendFormat("{0}={1}", item.Description, item.Value);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
                 sb.AppendLine();
             }
             sb.AppendLine("[WellmanReceipts]");
             foreach (var item in WellmanReceipts)
             {
-                sb.AppendFormat("{0}={1}", item.Description, item.Value);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
                 sb.AppendLine();
             }
             sb.AppendLine("[WellmanDebts]");
             foreach (var item in WellmanDebts)
             {
-                sb.AppendFormat("{0}={1}", item.Description, item.Value);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
                 sb.AppendLine();
             }
             sb.AppendLine("END");
@@ -279,22 +281,43 @@ namespace WellmansAndHaraldsEconomyApp
                 line = stream.ReadLine();
                 while (!stream.EndOfStream)
                 {
-                    while (line.StartsWith("[") && !stream.EndOfStream)
+                    if (line.StartsWith("[") && !stream.EndOfStream)
                     {
                         heading = line;
-                        if (!stream.EndOfStream)
-                            line = stream.ReadLine();
+                        line = stream.ReadLine();
                     }
+
+                    int[] indices = new int[3];
 
                     while (!line.StartsWith("[") && !stream.EndOfStream && line != "END")
                     {
-                        sepIndex = line.IndexOf('=');
-                        subLength2 = line.Length - sepIndex - 1;
-                        var item = new ExpenseItem()
+                        indices[0] = line.IndexOf('=');
+                        indices[1] = line.IndexOf('/');
+                        ExpenseItem item = null;
+                        if (indices[1] == -1)
+                        {
+                            item = new ExpenseItem()
                             {
-                                Description = line.Substring(0, sepIndex),
-                                Value = double.Parse(line.Substring(sepIndex + 1, subLength2))
+                                Description = line.Substring(0, indices[0]),
+                                TotalValue = double.Parse(line.Substring(indices[0] + 1, line.Length - indices[0] - 1))
                             };
+                        }
+                        else
+                        {
+                            indices[2] = line.IndexOf('/', indices[1] + 1);
+                            double splitAmount = double.Parse(line.Substring(indices[0] + 1, indices[1] - indices[0] - 1));
+                            double ownAmount = double.Parse(line.Substring(indices[1] + 1, indices[2] - indices[1] - 1));
+                            double otherAmount = double.Parse(line.Substring(indices[2] + 1, line.Length - indices[2] - 1));
+                            item = new ExpenseItem()
+                            {
+                                Description = line.Substring(0, indices[0]),
+                                SplitAmount = splitAmount,
+                                OwnAmount = ownAmount,
+                                OtherAmount = otherAmount,
+                                TotalValue = splitAmount + ownAmount + otherAmount
+                            };
+                        }
+                        
                         if (heading == "[HaraldReceipts]")
                             monthData.HaraldReceipts.Add(item);
                         else if (heading == "[HaraldDebts]")

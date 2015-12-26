@@ -88,12 +88,15 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddWellmanReceiptButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewWellmanReceipt.Value == 0)
+            if (NewWellmanReceipt.TotalValue == 0)
                 return;
             CurrentMonthData.AddWellmanReceipt(new ExpenseItem()
             {
                 Description = NewWellmanReceipt.Description,
-                Value = NewWellmanReceipt.Value
+                TotalValue = NewWellmanReceipt.TotalValue,
+                SplitAmount = NewWellmanReceipt.SplitAmount,
+                OwnAmount = NewWellmanReceipt.OwnAmount,
+                OtherAmount = NewWellmanReceipt.OtherAmount
             });
         }
 
@@ -105,12 +108,15 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddHaraldDebtButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewHaraldDebt.Value == 0)
+            if (NewHaraldDebt.TotalValue == 0)
                 return;
             CurrentMonthData.AddHaraldDebt(new ExpenseItem()
             {
                 Description = NewHaraldDebt.Description,
-                Value = NewHaraldDebt.Value
+                TotalValue = NewHaraldDebt.TotalValue,
+                SplitAmount = NewHaraldDebt.SplitAmount,
+                OwnAmount = NewHaraldDebt.OwnAmount,
+                OtherAmount = NewHaraldDebt.OtherAmount
             });
         }
 
@@ -122,12 +128,15 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddHaraldReceiptButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewHaraldReceipt.Value == 0)
+            if (NewHaraldReceipt.TotalValue == 0)
                 return;
             CurrentMonthData.AddHaraldReceipt(new ExpenseItem()
             {
                 Description = NewHaraldReceipt.Description,
-                Value = NewHaraldReceipt.Value
+                TotalValue = NewHaraldReceipt.TotalValue,
+                SplitAmount = NewHaraldReceipt.SplitAmount,
+                OwnAmount = NewHaraldReceipt.OwnAmount,
+                OtherAmount = NewHaraldReceipt.OtherAmount
             });
         }
 
@@ -139,12 +148,15 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddWellmanDebtButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewWellmanDebt.Value == 0)
+            if (NewWellmanDebt.TotalValue == 0)
                 return;
             CurrentMonthData.AddWellmanDebt(new ExpenseItem()
             {
                 Description = NewWellmanDebt.Description,
-                Value = NewWellmanDebt.Value
+                TotalValue = NewWellmanDebt.TotalValue,
+                SplitAmount = NewWellmanDebt.SplitAmount,
+                OwnAmount = NewWellmanDebt.OwnAmount,
+                OtherAmount = NewWellmanDebt.OtherAmount
             });
         }
 
