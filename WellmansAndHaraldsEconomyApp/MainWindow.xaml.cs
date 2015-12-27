@@ -88,7 +88,7 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddWellmanReceiptButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewWellmanReceipt.TotalValue == 0)
+            if (NewWellmanReceipt.TotalValue == 0 || string.IsNullOrEmpty(NewWellmanReceipt.Description))
                 return;
             CurrentMonthData.AddWellmanReceipt(new ExpenseItem()
             {
@@ -108,15 +108,12 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddHaraldDebtButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewHaraldDebt.TotalValue == 0)
+            if (NewHaraldDebt.TotalValue == 0 || string.IsNullOrEmpty(NewHaraldDebt.Description))
                 return;
             CurrentMonthData.AddHaraldDebt(new ExpenseItem()
             {
                 Description = NewHaraldDebt.Description,
-                TotalValue = NewHaraldDebt.TotalValue,
-                SplitAmount = NewHaraldDebt.SplitAmount,
-                OwnAmount = NewHaraldDebt.OwnAmount,
-                OtherAmount = NewHaraldDebt.OtherAmount
+                TotalValue = NewHaraldDebt.TotalValue
             });
         }
 
@@ -128,7 +125,7 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddHaraldReceiptButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewHaraldReceipt.TotalValue == 0)
+            if (NewHaraldReceipt.TotalValue == 0 || string.IsNullOrEmpty(NewHaraldReceipt.Description))
                 return;
             CurrentMonthData.AddHaraldReceipt(new ExpenseItem()
             {
@@ -148,15 +145,12 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void AddWellmanDebtButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewWellmanDebt.TotalValue == 0)
+            if (NewWellmanDebt.TotalValue == 0 || string.IsNullOrEmpty(NewWellmanDebt.Description))
                 return;
             CurrentMonthData.AddWellmanDebt(new ExpenseItem()
             {
                 Description = NewWellmanDebt.Description,
-                TotalValue = NewWellmanDebt.TotalValue,
-                SplitAmount = NewWellmanDebt.SplitAmount,
-                OwnAmount = NewWellmanDebt.OwnAmount,
-                OtherAmount = NewWellmanDebt.OtherAmount
+                TotalValue = NewWellmanDebt.TotalValue
             });
         }
 

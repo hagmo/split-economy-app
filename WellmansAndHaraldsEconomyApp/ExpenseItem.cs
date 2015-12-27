@@ -141,11 +141,7 @@ namespace WellmansAndHaraldsEconomyApp
 
         public override string ToString()
         {
-            string description = Description;
-            if (string.IsNullOrEmpty(Description))
-                description = "Receipt";
-
-            return string.Format("{0} ({1})", description, TotalValue);
+            return string.Format("{0} ({1})", Description, TotalValue);
         }
     }
 }
