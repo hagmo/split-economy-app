@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace WellmansAndHaraldsEconomyApp
 {
-    class ExpenseItemTemplateSelector : DataTemplateSelector
+    internal class ExpenseItemTemplateSelector : DataTemplateSelector
     {
         public DataTemplate ExtendedTemplate { get; set; }
         public DataTemplate BasicTemplate { get; set; }

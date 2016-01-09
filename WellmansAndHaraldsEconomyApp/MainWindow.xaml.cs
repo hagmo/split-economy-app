@@ -5,30 +5,23 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace WellmansAndHaraldsEconomyApp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : INotifyPropertyChanged
     {
-        private MonthData m_CurrentMonthData;
+        private MonthData _currentMonthData;
 
-        private static readonly string m_SaveDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WellmansAndHaraldsEconomyApp");
+        private static readonly string SaveDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WellmansAndHaraldsEconomyApp");
 
         public MainWindow()
         {
-            m_CurrentMonthData = new MonthData();
+            _currentMonthData = new MonthData();
 
             NewWellmanReceipt = new ExpenseItem();
             NewHaraldDebt = new ExpenseItem();
@@ -57,12 +50,12 @@ namespace WellmansAndHaraldsEconomyApp
 
         public MonthData CurrentMonthData
         {
-            get { return m_CurrentMonthData; }
+            get { return _currentMonthData; }
             set
             {
-                if (m_CurrentMonthData != value)
+                if (_currentMonthData != value)
                 {
-                    m_CurrentMonthData = value;
+                    _currentMonthData = value;
                     NotifyPropertyChanged("CurrentMonthData");
                 }
             }
@@ -162,7 +155,7 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            bool goAhead = true;
+            var goAhead = true;
             var oldData = PreviousMonthData.SingleOrDefault(x => x.CurrentMonth == CurrentMonthData.CurrentMonth && x.CurrentYear == CurrentMonthData.CurrentYear);
             if (oldData != null)
             {
@@ -177,8 +170,8 @@ namespace WellmansAndHaraldsEconomyApp
             {
                 PreviousMonthData.Add(CurrentMonthData);
 
-                Directory.CreateDirectory(m_SaveDir);
-                using (var writer = new StreamWriter(Path.Combine(m_SaveDir, string.Format("file{0}-{1}", CurrentMonthData.CurrentYear, CurrentMonthData.CurrentMonth + 1))))
+                Directory.CreateDirectory(SaveDir);
+                using (var writer = new StreamWriter(Path.Combine(SaveDir, string.Format("file{0}-{1}", CurrentMonthData.CurrentYear, CurrentMonthData.CurrentMonth + 1))))
                 {
                     writer.Write(CurrentMonthData.GetSaveString());
                 }
@@ -189,10 +182,10 @@ namespace WellmansAndHaraldsEconomyApp
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-            var saveDir = new DirectoryInfo(m_SaveDir);
+            var saveDir = new DirectoryInfo(SaveDir);
             if (saveDir.Exists)
             {
-                List<string> invalidFiles = new List<string>();
+                var invalidFiles = new List<string>();
                 foreach (var file in saveDir.EnumerateFiles())
                 {
                     using (var reader = file.OpenText())
@@ -221,7 +214,7 @@ namespace WellmansAndHaraldsEconomyApp
                     {
                         foreach (var fileName in invalidFiles)
                         {
-                            File.Delete(Path.Combine(m_SaveDir, fileName));
+                            File.Delete(Path.Combine(SaveDir, fileName));
                         }
                     }
                 }

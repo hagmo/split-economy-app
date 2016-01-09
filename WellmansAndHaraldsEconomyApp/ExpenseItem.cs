@@ -9,14 +9,14 @@ namespace WellmansAndHaraldsEconomyApp
 {
     public class ExpenseItem : INotifyPropertyChanged
     {
-        private double m_TotalValue;
-        private double m_SplitAmount;
-        private double m_OwnAmount;
-        private double m_OtherAmount;
+        private double _totalValue;
+        private double _splitAmount;
+        private double _ownAmount;
+        private double _otherAmount;
 
-        private bool m_CalcSplit;
-        private bool m_CalcOwn;
-        private bool m_CalcOther;
+        private bool _calcSplit;
+        private bool _calcOwn;
+        private bool _calcOther;
 
         public ExpenseItem()
         {
@@ -26,12 +26,12 @@ namespace WellmansAndHaraldsEconomyApp
         public string Description { get; set; }
         public double TotalValue
         {
-            get { return m_TotalValue; }
+            get { return _totalValue; }
             set
             {
-                if (m_TotalValue != value)
+                if (_totalValue != value)
                 {
-                    m_TotalValue = value;
+                    _totalValue = value;
                     NotifyPropertyChanged("TotalValue");
                     CalculateReceiptValues();
                 }
@@ -39,12 +39,12 @@ namespace WellmansAndHaraldsEconomyApp
         }
         public double SplitAmount
         {
-            get { return m_SplitAmount; }
+            get { return _splitAmount; }
             set
             {
-                if (m_SplitAmount != value)
+                if (_splitAmount != value)
                 {
-                    m_SplitAmount = value;
+                    _splitAmount = value;
                     NotifyPropertyChanged("SplitAmount");
                     CalculateReceiptValues();
                 }
@@ -52,12 +52,12 @@ namespace WellmansAndHaraldsEconomyApp
         }
         public double OwnAmount
         {
-            get { return m_OwnAmount; }
+            get { return _ownAmount; }
             set
             {
-                if (m_OwnAmount != value)
+                if (_ownAmount != value)
                 {
-                    m_OwnAmount = value;
+                    _ownAmount = value;
                     NotifyPropertyChanged("OwnAmount");
                     CalculateReceiptValues();
                 }
@@ -65,12 +65,12 @@ namespace WellmansAndHaraldsEconomyApp
         }
         public double OtherAmount
         {
-            get { return m_OtherAmount; }
+            get { return _otherAmount; }
             set
             {
-                if (m_OtherAmount != value)
+                if (_otherAmount != value)
                 {
-                    m_OtherAmount = value;
+                    _otherAmount = value;
                     NotifyPropertyChanged("OtherAmount");
                     CalculateReceiptValues();
                 }
@@ -79,12 +79,12 @@ namespace WellmansAndHaraldsEconomyApp
 
         public bool CalcSplit
         {
-            get { return m_CalcSplit; }
+            get { return _calcSplit; }
             set
             {
-                if (m_CalcSplit != value)
+                if (_calcSplit != value)
                 {
-                    m_CalcSplit = value;
+                    _calcSplit = value;
                     NotifyPropertyChanged("CalcSplit");
                     CalculateReceiptValues();
                 }
@@ -93,12 +93,12 @@ namespace WellmansAndHaraldsEconomyApp
 
         public bool CalcOwn
         {
-            get { return m_CalcOwn; }
+            get { return _calcOwn; }
             set
             {
-                if (m_CalcOwn != value)
+                if (_calcOwn != value)
                 {
-                    m_CalcOwn = value;
+                    _calcOwn = value;
                     NotifyPropertyChanged("CalcOwn");
                     CalculateReceiptValues();
                 }
@@ -107,12 +107,12 @@ namespace WellmansAndHaraldsEconomyApp
 
         public bool CalcOther
         {
-            get { return m_CalcOther; }
+            get { return _calcOther; }
             set
             {
-                if (m_CalcOther != value)
+                if (_calcOther != value)
                 {
-                    m_CalcOther = value;
+                    _calcOther = value;
                     NotifyPropertyChanged("CalcOther");
                     CalculateReceiptValues();
                 }

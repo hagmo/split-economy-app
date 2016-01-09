@@ -1,30 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace WellmansAndHaraldsEconomyApp
 {
     public class MonthData : INotifyPropertyChanged
     {
         #region fields
-        private double m_Rent;
-        private double m_HGF;
-        private double m_Insurance;
+        private double _rent;
+        private double _hgf;
+        private double _insurance;
 
-        private double m_Broadband;
-        private double m_Electricity;
+        private double _broadband;
+        private double _electricity;
         #endregion
 
         public MonthData()
         {
-            m_Rent = 8397;
-            m_HGF = 80;
-            m_Insurance = 161;
-            m_Broadband = 369;
+            _rent = 8397;
+            _hgf = 80;
+            _insurance = 161;
+            _broadband = 369;
 
             WellmanReceipts = new ObservableCollection<ExpenseItem>();
             HaraldDebts = new ObservableCollection<ExpenseItem>();
@@ -41,36 +39,36 @@ namespace WellmansAndHaraldsEconomyApp
 
         public double Rent
         {
-            get { return m_Rent; }
+            get { return _rent; }
             set
             {
-                if (m_Rent != value)
+                if (_rent != value)
                 {
-                    m_Rent = value;
+                    _rent = value;
                     NotifyPropertyChanged("ResultValue");
                 }
             }
         }
         public double HGF
         {
-            get { return m_HGF; }
+            get { return _hgf; }
             set
             {
-                if (m_HGF != value)
+                if (_hgf != value)
                 {
-                    m_HGF = value;
+                    _hgf = value;
                     NotifyPropertyChanged("ResultValue");
                 }
             }
         }
         public double Insurance
         {
-            get { return m_Insurance; }
+            get { return _insurance; }
             set
             {
-                if (m_Insurance != value)
+                if (_insurance != value)
                 {
-                    m_Insurance = value;
+                    _insurance = value;
                     NotifyPropertyChanged("ResultValue");
                 }
             }
@@ -78,24 +76,24 @@ namespace WellmansAndHaraldsEconomyApp
 
         public double Broadband
         {
-            get { return m_Broadband; }
+            get { return _broadband; }
             set
             {
-                if (m_Broadband != value)
+                if (_broadband != value)
                 {
-                    m_Broadband = value;
+                    _broadband = value;
                     NotifyPropertyChanged("ResultValue");
                 }
             }
         }
         public double Electricity
         {
-            get { return m_Electricity; }
+            get { return _electricity; }
             set
             {
-                if (m_Electricity != value)
+                if (_electricity != value)
                 {
-                    m_Electricity = value;
+                    _electricity = value;
                     NotifyPropertyChanged("ResultValue");
                 }
             }
@@ -124,10 +122,7 @@ namespace WellmansAndHaraldsEconomyApp
                     result += item.SplitAmount / 2d;
                     result += item.OtherAmount;
                 }
-                foreach (var item in HaraldDebts)
-                {
-                    result += item.TotalValue;
-                }
+                result += HaraldDebts.Sum(item => item.TotalValue);
                 foreach (var item in HaraldReceipts)
                 {
                     result -= item.SplitAmount / 2d;
@@ -254,8 +249,8 @@ namespace WellmansAndHaraldsEconomyApp
             try
             {
                 var line = stream.ReadLine();
-                int sepIndex = line.IndexOf('-');
-                int subLength2 = line.Length - sepIndex - 2;
+                var sepIndex = line.IndexOf('-');
+                var subLength2 = line.Length - sepIndex - 2;
                 monthData.CurrentMonth = int.Parse(line.Substring(1, sepIndex - 1)) - 1;
                 monthData.CurrentYear = int.Parse(line.Substring(sepIndex + 1, subLength2));
                 line = stream.ReadLine();
@@ -287,7 +282,7 @@ namespace WellmansAndHaraldsEconomyApp
                         line = stream.ReadLine();
                     }
 
-                    int[] indices = new int[3];
+                    var indices = new int[3];
 
                     while (!line.StartsWith("[") && !stream.EndOfStream && line != "END")
                     {
@@ -305,9 +300,9 @@ namespace WellmansAndHaraldsEconomyApp
                         else
                         {
                             indices[2] = line.IndexOf('/', indices[1] + 1);
-                            double splitAmount = double.Parse(line.Substring(indices[0] + 1, indices[1] - indices[0] - 1));
-                            double ownAmount = double.Parse(line.Substring(indices[1] + 1, indices[2] - indices[1] - 1));
-                            double otherAmount = double.Parse(line.Substring(indices[2] + 1, line.Length - indices[2] - 1));
+                            var splitAmount = double.Parse(line.Substring(indices[0] + 1, indices[1] - indices[0] - 1));
+                            var ownAmount = double.Parse(line.Substring(indices[1] + 1, indices[2] - indices[1] - 1));
+                            var otherAmount = double.Parse(line.Substring(indices[2] + 1, line.Length - indices[2] - 1));
                             item = new ExpenseItem()
                             {
                                 Description = line.Substring(0, indices[0]),
@@ -318,14 +313,21 @@ namespace WellmansAndHaraldsEconomyApp
                             };
                         }
                         
-                        if (heading == "[HaraldReceipts]")
-                            monthData.HaraldReceipts.Add(item);
-                        else if (heading == "[HaraldDebts]")
-                            monthData.HaraldDebts.Add(item);
-                        else if (heading == "[WellmanReceipts]")
-                            monthData.WellmanReceipts.Add(item);
-                        else if (heading == "[WellmanDebts]")
-                            monthData.WellmanDebts.Add(item);
+                        switch (heading)
+                        {
+                            case "[HaraldReceipts]":
+                                monthData.HaraldReceipts.Add(item);
+                                break;
+                            case "[HaraldDebts]":
+                                monthData.HaraldDebts.Add(item);
+                                break;
+                            case "[WellmanReceipts]":
+                                monthData.WellmanReceipts.Add(item);
+                                break;
+                            case "[WellmanDebts]":
+                                monthData.WellmanDebts.Add(item);
+                                break;
+                        }
 
                         if (!stream.EndOfStream)
                             line = stream.ReadLine();
