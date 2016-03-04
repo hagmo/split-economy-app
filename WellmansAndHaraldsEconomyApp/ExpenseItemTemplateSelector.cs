@@ -15,7 +15,7 @@ namespace WellmansAndHaraldsEconomyApp
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             var expenseItem = item as ExpenseItem;
-            if (expenseItem.SplitAmount != expenseItem.TotalValue)
+            if (double.Parse(expenseItem.SplitAmountString) != expenseItem.TotalValue)
                 return ExtendedTemplate;
             else
                 return BasicTemplate;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WellmansAndHaraldsEconomyApp
@@ -10,9 +11,9 @@ namespace WellmansAndHaraldsEconomyApp
     public class ExpenseItem : INotifyPropertyChanged
     {
         private double _totalValue;
-        private double _splitAmount;
-        private double _ownAmount;
-        private double _otherAmount;
+        private string _splitAmountString;
+        private string _ownAmountString;
+        private string _otherAmountString;
 
         private bool _calcSplit;
         private bool _calcOwn;
@@ -24,6 +25,7 @@ namespace WellmansAndHaraldsEconomyApp
         }
 
         public string Description { get; set; }
+        
         public double TotalValue
         {
             get { return _totalValue; }
@@ -37,44 +39,60 @@ namespace WellmansAndHaraldsEconomyApp
                 }
             }
         }
-        public double SplitAmount
+
+        public string SplitAmountString
         {
-            get { return _splitAmount; }
+            get { return _splitAmountString; }
             set
             {
-                if (_splitAmount != value)
+                if (_splitAmountString != value)
                 {
-                    _splitAmount = value;
-                    NotifyPropertyChanged("SplitAmount");
+                    _splitAmountString = value;
+                    NotifyPropertyChanged("SplitAmountString");
+                    CalculateReceiptValues();
+                }
+            }
+        }
+
+        public double SplitAmount
+        {
+            get { return ParseExpression(SplitAmountString) ?? 0; }
+        }
+
+        public string OwnAmountString
+        {
+            get { return _ownAmountString; }
+            set
+            {
+                if (_ownAmountString != value)
+                {
+                    _ownAmountString = value;
+                    NotifyPropertyChanged("OwnAmountString");
                     CalculateReceiptValues();
                 }
             }
         }
         public double OwnAmount
         {
-            get { return _ownAmount; }
+            get { return ParseExpression(OwnAmountString) ?? 0; }
+        }
+
+        public string OtherAmountString
+        {
+            get { return _otherAmountString; }
             set
             {
-                if (_ownAmount != value)
+                if (_otherAmountString != value)
                 {
-                    _ownAmount = value;
-                    NotifyPropertyChanged("OwnAmount");
+                    _otherAmountString = value;
+                    NotifyPropertyChanged("OtherAmountString");
                     CalculateReceiptValues();
                 }
             }
         }
         public double OtherAmount
         {
-            get { return _otherAmount; }
-            set
-            {
-                if (_otherAmount != value)
-                {
-                    _otherAmount = value;
-                    NotifyPropertyChanged("OtherAmount");
-                    CalculateReceiptValues();
-                }
-            }
+            get { return ParseExpression(OtherAmountString) ?? 0; }
         }
 
         public bool CalcSplit
@@ -132,16 +150,47 @@ namespace WellmansAndHaraldsEconomyApp
         private void CalculateReceiptValues()
         {
             if (CalcSplit)
-                SplitAmount = TotalValue - OwnAmount - OtherAmount;
+                SplitAmountString = (TotalValue - OwnAmount - OtherAmount).ToString("F");
             else if (CalcOwn)
-                OwnAmount = TotalValue - SplitAmount - OtherAmount;
+                OwnAmountString = (TotalValue - SplitAmount - OtherAmount).ToString("F");
             else if (CalcOther)
-                OtherAmount = TotalValue - OwnAmount - SplitAmount;
+                OtherAmountString = (TotalValue - OwnAmount - SplitAmount).ToString("F");
         }
 
         public override string ToString()
         {
             return string.Format("{0} ({1})", Description, TotalValue);
+        }
+
+        private static double? ParseExpression(string exprString)
+        {
+            if (string.IsNullOrEmpty(exprString)) return 0;
+
+            exprString = exprString.Replace(" ", string.Empty);
+            var opRegex = new Regex(@"[\+-]");
+            var match1 = opRegex.Match(exprString);
+            if (match1.Index == 0)
+            {
+                return double.Parse(exprString);
+            }
+            var match2 = opRegex.Match(exprString, match1.Index + 1);
+
+            var result = double.Parse(exprString.Substring(0, match1.Index));
+            try
+            {
+                while (match1.Index > 0 && match2.Index > 0)
+                {
+                    result += int.Parse(exprString.Substring(match1.Index, match2.Index - match1.Index));
+                    match1 = match2;
+                    match2 = opRegex.Match(exprString, match1.Index + 1);
+                }
+                result += double.Parse(exprString.Substring(match1.Index));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return result;
         }
     }
 }

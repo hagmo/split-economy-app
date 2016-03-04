@@ -28,9 +28,30 @@
             <StackPanel>
                 <TextBlock Text="{Binding Description}"/>
                 <TextBlock Text="{Binding TotalValue, StringFormat='Total value: {0}'}"/>
-                <TextBlock Text="{Binding SplitAmount, StringFormat='Split amount: {0}'}"/>
-                <TextBlock Text="{Binding OwnAmount, StringFormat='Own amount: {0}'}"/>
-                <TextBlock Text="{Binding OtherAmount, StringFormat='Other amount: {0}'}"/>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Split amount: {0:F} ({1})">
+                            <Binding Path="SplitAmount"/>
+                            <Binding Path="SplitAmountString"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Own amount: {0:F} ({1})">
+                            <Binding Path="OwnAmount"/>
+                            <Binding Path="OwnAmountString"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Other amount: {0:F} ({1})">
+                            <Binding Path="OtherAmount"/>
+                            <Binding Path="OtherAmountString"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
         </DataTemplate>
 
@@ -45,11 +66,16 @@
     <Grid VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
+            <ColumnDefinition Width="23"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="23"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <StackPanel Grid.Column="2" MaxWidth="200">
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" Width="3"/>
+        <GridSplitter Grid.Column="3" HorizontalAlignment="Center" Width="3"/>
+        
+        <StackPanel Grid.Column="4" Margin="10">
             <TextBlock FontSize="22" FontWeight="Bold">Results</TextBlock>
             <GroupBox Header="Current month">
                 <StackPanel>
@@ -86,7 +112,7 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
-        <StackPanel Grid.Column="1" MaxWidth="200">
+        <StackPanel Grid.Column="2" Margin="10">
             <TextBlock FontSize="22" FontWeight="Bold">Wellman</TextBlock>
             <GroupBox Header="Single expenses">
                 <StackPanel>
@@ -118,19 +144,19 @@
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Split amount</TextBlock>
                         <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewWellmanReceipt.CalcSplit}" GroupName="Wellman" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.SplitAmount, Converter={StaticResource StringToDoubleConverter}}"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.SplitAmountString}"
                             IsEnabled="{Binding NewWellmanReceipt.CalcSplit, Converter={StaticResource InverseBoolConverter}}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Harald</TextBlock>
                         <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewWellmanReceipt.CalcOther}" GroupName="Wellman" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.OtherAmount, Converter={StaticResource StringToDoubleConverter}}"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.OtherAmountString}"
                                  IsEnabled="{Binding NewWellmanReceipt.CalcOther, Converter={StaticResource InverseBoolConverter}}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Wellman</TextBlock>
                         <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewWellmanReceipt.CalcOwn}" GroupName="Wellman" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.OwnAmount, Converter={StaticResource StringToDoubleConverter}}"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.OwnAmountString}"
                                  IsEnabled="{Binding NewWellmanReceipt.CalcOwn, Converter={StaticResource InverseBoolConverter}}"/>
                     </DockPanel>
                     <Button Click="AddWellmanReceiptButton_Click">Add</Button>
@@ -155,7 +181,7 @@
             </GroupBox>
         </StackPanel>
 
-        <StackPanel Grid.Column="0" MaxWidth="200">
+        <StackPanel Grid.Column="0" Margin="10">
             <TextBlock FontSize="22" FontWeight="Bold">Harald</TextBlock>
             <GroupBox Header="Single expenses">
                 <StackPanel>
@@ -183,19 +209,19 @@
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Split amount</TextBlock>
                         <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewHaraldReceipt.CalcSplit}" GroupName="Harald" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.SplitAmount, Converter={StaticResource StringToDoubleConverter}}"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.SplitAmountString}"
                             IsEnabled="{Binding NewHaraldReceipt.CalcSplit, Converter={StaticResource InverseBoolConverter}}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Harald</TextBlock>
                         <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewHaraldReceipt.CalcOwn}" GroupName="Harald" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.OwnAmount, Converter={StaticResource StringToDoubleConverter}}"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.OwnAmountString}"
                                  IsEnabled="{Binding NewHaraldReceipt.CalcOwn, Converter={StaticResource InverseBoolConverter}}"/>
                     </DockPanel>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Wellman</TextBlock>
                         <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewHaraldReceipt.CalcOther}" GroupName="Harald" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.OtherAmount, Converter={StaticResource StringToDoubleConverter}}"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.OtherAmountString}"
                                  IsEnabled="{Binding NewHaraldReceipt.CalcOther, Converter={StaticResource InverseBoolConverter}}"/>
                     </DockPanel>
                     

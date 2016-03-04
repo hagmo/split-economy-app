@@ -4,19 +4,16 @@ using System.Windows.Data;
 
 namespace WellmansAndHaraldsEconomyApp
 {
-    internal class StringToDoubleConverter : IValueConverter
+    internal class InverseBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value.ToString();
+            return !(bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var str = value as string;
-            if (string.IsNullOrEmpty(str))
-                return 0;
-            return double.Parse(str, culture);
+            return !(bool)value;
         }
     }
 }

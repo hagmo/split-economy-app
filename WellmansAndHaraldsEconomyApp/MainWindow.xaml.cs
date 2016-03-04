@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -87,9 +88,9 @@ namespace WellmansAndHaraldsEconomyApp
             {
                 Description = NewWellmanReceipt.Description,
                 TotalValue = NewWellmanReceipt.TotalValue,
-                SplitAmount = NewWellmanReceipt.SplitAmount,
-                OwnAmount = NewWellmanReceipt.OwnAmount,
-                OtherAmount = NewWellmanReceipt.OtherAmount
+                SplitAmountString = NewWellmanReceipt.SplitAmountString,
+                OwnAmountString = NewWellmanReceipt.OwnAmountString,
+                OtherAmountString = NewWellmanReceipt.OtherAmountString
             });
         }
 
@@ -124,9 +125,9 @@ namespace WellmansAndHaraldsEconomyApp
             {
                 Description = NewHaraldReceipt.Description,
                 TotalValue = NewHaraldReceipt.TotalValue,
-                SplitAmount = NewHaraldReceipt.SplitAmount,
-                OwnAmount = NewHaraldReceipt.OwnAmount,
-                OtherAmount = NewHaraldReceipt.OtherAmount
+                SplitAmountString = NewHaraldReceipt.SplitAmountString,
+                OwnAmountString = NewHaraldReceipt.OwnAmountString,
+                OtherAmountString = NewHaraldReceipt.OtherAmountString
             });
         }
 
@@ -221,7 +222,7 @@ namespace WellmansAndHaraldsEconomyApp
             }
         }
 
-        public void Textbox_GotFocus(object sender, RoutedEventArgs e)
+        private void Textbox_GotFocus(object sender, RoutedEventArgs e)
         {
             (sender as TextBox).SelectAll();
         }

@@ -216,25 +216,25 @@ namespace WellmansAndHaraldsEconomyApp
             sb.AppendLine("[HaraldReceipts]");
             foreach (var item in HaraldReceipts)
             {
-                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmountString, item.OtherAmountString, item.OwnAmountString);
                 sb.AppendLine();
             }
             sb.AppendLine("[HaraldDebts]");
             foreach (var item in HaraldDebts)
             {
-                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmountString, item.OtherAmountString, item.OwnAmountString);
                 sb.AppendLine();
             }
             sb.AppendLine("[WellmanReceipts]");
             foreach (var item in WellmanReceipts)
             {
-                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmountString, item.OtherAmountString, item.OwnAmountString);
                 sb.AppendLine();
             }
             sb.AppendLine("[WellmanDebts]");
             foreach (var item in WellmanDebts)
             {
-                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmount, item.OtherAmount, item.OwnAmount);
+                sb.AppendFormat("{0}={1}/{2}/{3}", item.Description, item.SplitAmountString, item.OtherAmountString, item.OwnAmountString);
                 sb.AppendLine();
             }
             sb.AppendLine("END");
@@ -300,17 +300,18 @@ namespace WellmansAndHaraldsEconomyApp
                         else
                         {
                             indices[2] = line.IndexOf('/', indices[1] + 1);
-                            var splitAmount = double.Parse(line.Substring(indices[0] + 1, indices[1] - indices[0] - 1));
-                            var ownAmount = double.Parse(line.Substring(indices[1] + 1, indices[2] - indices[1] - 1));
-                            var otherAmount = double.Parse(line.Substring(indices[2] + 1, line.Length - indices[2] - 1));
+                            var splitAmount = line.Substring(indices[0] + 1, indices[1] - indices[0] - 1);
+                            var ownAmount = line.Substring(indices[1] + 1, indices[2] - indices[1] - 1);
+                            var otherAmount = line.Substring(indices[2] + 1, line.Length - indices[2] - 1);
                             item = new ExpenseItem()
                             {
                                 Description = line.Substring(0, indices[0]),
-                                SplitAmount = splitAmount,
-                                OwnAmount = ownAmount,
-                                OtherAmount = otherAmount,
-                                TotalValue = splitAmount + ownAmount + otherAmount
+                                CalcSplit = false,
+                                SplitAmountString = splitAmount,
+                                OwnAmountString = ownAmount,
+                                OtherAmountString = otherAmount
                             };
+                            item.TotalValue = item.SplitAmount + item.OwnAmount + item.OtherAmount;
                         }
                         
                         switch (heading)
