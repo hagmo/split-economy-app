@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:WellmansAndHaraldsEconomyApp"
-        Title="Fredrik's &amp; Harald's Economy App" Height="1024" Width="800"
+        Title="Fredrik's &amp; Harald's Economy App" Width="800" SizeToContent="Height"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Initialized="Window_Initialized">
     
@@ -10,57 +10,6 @@
         <Style TargetType="TextBox">
             <EventSetter Event="GotFocus" Handler="Textbox_GotFocus"/>
         </Style>
-        
-        <DataTemplate x:Key="SimpleExpenseItemTemplate">
-            <StackPanel>
-                <TextBlock>
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0}: {1}">
-                            <Binding Path="Description"/>
-                            <Binding Path="TotalValue"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ExtendedExpenseItemTemplate">
-            <StackPanel>
-                <TextBlock Text="{Binding Description}"/>
-                <TextBlock Text="{Binding TotalValue, StringFormat='Total value: {0}'}"/>
-                <TextBlock>
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="Split amount: {0:F} ({1})">
-                            <Binding Path="SplitAmount"/>
-                            <Binding Path="SplitAmountString"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-                <TextBlock>
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="Own amount: {0:F} ({1})">
-                            <Binding Path="OwnAmount"/>
-                            <Binding Path="OwnAmountString"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-                <TextBlock>
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="Other amount: {0:F} ({1})">
-                            <Binding Path="OtherAmount"/>
-                            <Binding Path="OtherAmountString"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </StackPanel>
-        </DataTemplate>
-
-        <local:ExpenseItemTemplateSelector x:Key="ExpenseItemTemplateSelector"
-                                           BasicTemplate="{StaticResource SimpleExpenseItemTemplate}"
-                                           ExtendedTemplate="{StaticResource ExtendedExpenseItemTemplate}"/>
-        
-        <local:StringToDoubleConverter x:Key="StringToDoubleConverter"/>
-        <local:InverseBoolConverter x:Key="InverseBoolConverter"/>
     </Window.Resources>
     
     <Grid VerticalAlignment="Center">
@@ -133,50 +82,12 @@
             
             <GroupBox Header="Receipts">
                 <StackPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Description</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.Description}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Total value</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.TotalValue, Converter={StaticResource StringToDoubleConverter}}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Split amount</TextBlock>
-                        <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewWellmanReceipt.CalcSplit}" GroupName="Wellman" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.SplitAmountString}"
-                            IsEnabled="{Binding NewWellmanReceipt.CalcSplit, Converter={StaticResource InverseBoolConverter}}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Harald</TextBlock>
-                        <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewWellmanReceipt.CalcOther}" GroupName="Wellman" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.OtherAmountString}"
-                                 IsEnabled="{Binding NewWellmanReceipt.CalcOther, Converter={StaticResource InverseBoolConverter}}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Wellman</TextBlock>
-                        <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewWellmanReceipt.CalcOwn}" GroupName="Wellman" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanReceipt.OwnAmountString}"
-                                 IsEnabled="{Binding NewWellmanReceipt.CalcOwn, Converter={StaticResource InverseBoolConverter}}"/>
-                    </DockPanel>
-                    <Button Click="AddWellmanReceiptButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedWellmanReceipt}" ItemsSource="{Binding CurrentMonthData.WellmanReceipts}" Height="250" ItemTemplateSelector="{StaticResource ExpenseItemTemplateSelector}"/>
-                    <Button Click="RemoveWellmanReceiptButton_Click">Remove</Button>
+                    <TextBox Height="200" Text=""/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Harald's debts">
                 <StackPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Description</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldDebt.Description}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Value</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldDebt.TotalValue}"/>
-                    </DockPanel>
-                    <Button Click="AddHaraldDebtButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedHaraldDebt}" ItemsSource="{Binding CurrentMonthData.HaraldDebts}" Height="250"/>
-                    <Button Click="RemoveHaraldDebtButton_Click">Remove</Button>
+                    <TextBox Height="200" Text=""/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
@@ -198,52 +109,13 @@
             
             <GroupBox Header="Receipts">
                 <StackPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Description</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.Description}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Total value</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.TotalValue, Converter={StaticResource StringToDoubleConverter}}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Split amount</TextBlock>
-                        <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewHaraldReceipt.CalcSplit}" GroupName="Harald" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.SplitAmountString}"
-                            IsEnabled="{Binding NewHaraldReceipt.CalcSplit, Converter={StaticResource InverseBoolConverter}}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Harald</TextBlock>
-                        <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewHaraldReceipt.CalcOwn}" GroupName="Harald" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.OwnAmountString}"
-                                 IsEnabled="{Binding NewHaraldReceipt.CalcOwn, Converter={StaticResource InverseBoolConverter}}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Margin="10,0,0,0" Width="70">Wellman</TextBlock>
-                        <RadioButton DockPanel.Dock="Right" VerticalAlignment="Center" IsChecked="{Binding NewHaraldReceipt.CalcOther}" GroupName="Harald" Focusable="False"/>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewHaraldReceipt.OtherAmountString}"
-                                 IsEnabled="{Binding NewHaraldReceipt.CalcOther, Converter={StaticResource InverseBoolConverter}}"/>
-                    </DockPanel>
-                    
-                    <Button Click="AddHaraldReceiptButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedHaraldReceipt}" ItemsSource="{Binding CurrentMonthData.HaraldReceipts}" Height="250" ItemTemplateSelector="{StaticResource ExpenseItemTemplateSelector}"/>
-                    <Button Click="RemoveHaraldReceiptButton_Click">Remove</Button>
+                    <TextBox Height="200" Text="{Binding HaraldReceiptsString}" PreviewKeyDown="HaraldReceipts_OnKeyDown" AcceptsReturn="True" />
                 </StackPanel>
             </GroupBox>
             
             <GroupBox Header="Wellman's debts">
                 <StackPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Description</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanDebt.Description}"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Width="80">Value</TextBlock>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding NewWellmanDebt.TotalValue}"/>
-                    </DockPanel>
-                    <Button Click="AddWellmanDebtButton_Click">Add</Button>
-                    <ListBox SelectedItem="{Binding SelectedWellmanDebt}" ItemsSource="{Binding CurrentMonthData.WellmanDebts}" Height="250"/>
-                    <Button Click="RemoveWellmanDebtButton_Click">Remove</Button>
+                    <TextBox Height="200" Text="{Binding WellmanDebtsString}"/>
                 </StackPanel>
             </GroupBox>
             

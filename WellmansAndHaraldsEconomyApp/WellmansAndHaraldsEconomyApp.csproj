@@ -57,7 +57,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ExpenseItemTemplateSelector.cs" />
     <Compile Include="InverseBoolConverter.cs" />
     <Compile Include="StringToDoubleConverter.cs" />
     <Page Include="MainWindow.xaml">
