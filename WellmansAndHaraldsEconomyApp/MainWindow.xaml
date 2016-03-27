@@ -109,13 +109,13 @@
             
             <GroupBox Header="Receipts">
                 <StackPanel>
-                    <TextBox Height="200" Text="{Binding HaraldReceiptsString}" PreviewKeyDown="HaraldReceipts_OnKeyDown" AcceptsReturn="True" />
+                    <TextBox Height="200" Text="{Binding HaraldReceiptsString}" PreviewKeyDown="HaraldReceipts_OnPreviewKeyDown" AcceptsReturn="True" />
                 </StackPanel>
             </GroupBox>
             
             <GroupBox Header="Wellman's debts">
                 <StackPanel>
-                    <TextBox Height="200" Text="{Binding WellmanDebtsString}"/>
+                    <TextBox Height="200" Text="{Binding WellmanDebtsString}" PreviewKeyDown="WellmanDebts_OnPreviewKeyDown" AcceptsReturn="True"/>
                 </StackPanel>
             </GroupBox>
             

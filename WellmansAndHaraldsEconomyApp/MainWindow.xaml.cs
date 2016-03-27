@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -53,7 +52,7 @@ namespace WellmansAndHaraldsEconomyApp
             get { return ExpenseItemListString(CurrentMonthData.HaraldReceipts); }
             set
             {
-                UpdateExpenseItemList(CurrentMonthData.HaraldReceipts, value, false);
+                UpdateExpenseItemList(CurrentMonthData.HaraldReceipts, value);
                 NotifyPropertyChanged("HaraldReceiptsString");
             }
         }
@@ -63,7 +62,7 @@ namespace WellmansAndHaraldsEconomyApp
             get { return ExpenseItemListString(CurrentMonthData.WellmanDebts); }
             set
             {
-                UpdateExpenseItemList(CurrentMonthData.WellmanDebts, value, true);
+                UpdateExpenseItemList(CurrentMonthData.WellmanDebts, value);
                 NotifyPropertyChanged("WellmanDebtsString");
             }
         }
@@ -164,17 +163,6 @@ namespace WellmansAndHaraldsEconomyApp
             CurrentMonthData = new MonthData();
         }
 
-        private void HaraldReceipts_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            if (e.Key != Key.Enter && e.Key != Key.Return || textBox == null)
-                return;
-
-            HaraldReceiptsString = textBox.Text;
-
-            textBox.CaretIndex = textBox.Text.Length;
-        }
-
         private string ExpenseItemListString(IEnumerable<ExpenseItem> items)
         {
             var sb = new StringBuilder();
@@ -189,25 +177,46 @@ namespace WellmansAndHaraldsEconomyApp
             return sb.ToString();
         }
 
-        private void UpdateExpenseItemList(ObservableCollection<ExpenseItem> items, string value, bool debts)
+        private void UpdateExpenseItemList(ICollection<Receipt> items, string value)
         {
             items.Clear();
             var lines = value.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            //for (var i = 0; i < lines.Length; i++)
-            //{
-            //    if (i < lines.Length - 1)
-            //    {
-            //        items.Add(new ExpenseItem(lines[i]));
-            //    }
-            //    else if (lines[i].Length > 0)
-            //    {
-            //        items.Add(new ExpenseItem(lines[i], false, false));
-            //    }
-            //}
             foreach (var line in lines)
             {
-                items.Add(new ExpenseItem(line));
+                items.Add(new Receipt(line));
             }
+        }
+
+        private void UpdateExpenseItemList(ICollection<DebtItem> items, string value)
+        {
+            items.Clear();
+            var lines = value.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                items.Add(new DebtItem(line));
+            }
+        }
+
+        private void HaraldReceipts_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (e.Key != Key.Enter && e.Key != Key.Return || textBox == null)
+                return;
+
+            HaraldReceiptsString = textBox.Text;
+
+            textBox.CaretIndex = textBox.Text.Length;
+        }
+
+        private void WellmanDebts_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (e.Key != Key.Enter && e.Key != Key.Return || textBox == null)
+                return;
+
+            WellmanDebtsString = textBox.Text;
+
+            textBox.CaretIndex = textBox.Text.Length;
         }
     }
 }

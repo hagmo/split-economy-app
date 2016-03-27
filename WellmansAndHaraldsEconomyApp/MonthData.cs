@@ -24,10 +24,10 @@ namespace WellmansAndHaraldsEconomyApp
             _insurance = 201;
             _broadband = 369;
 
-            WellmanReceipts = new ObservableCollection<ExpenseItem>();
-            HaraldDebts = new ObservableCollection<ExpenseItem>();
-            HaraldReceipts = new ObservableCollection<ExpenseItem>();
-            WellmanDebts = new ObservableCollection<ExpenseItem>();
+            WellmanReceipts = new ObservableCollection<Receipt>();
+            HaraldDebts = new ObservableCollection<DebtItem>();
+            HaraldReceipts = new ObservableCollection<Receipt>();
+            WellmanDebts = new ObservableCollection<DebtItem>();
 
             CurrentMonth = DateTime.Now.Month - 1;
             CurrentYear = DateTime.Now.Year;
@@ -99,10 +99,10 @@ namespace WellmansAndHaraldsEconomyApp
             }
         }
 
-        public ObservableCollection<ExpenseItem> WellmanReceipts { get; set; }
-        public ObservableCollection<ExpenseItem> HaraldDebts { get; set; }
-        public ObservableCollection<ExpenseItem> HaraldReceipts { get; set; }
-        public ObservableCollection<ExpenseItem> WellmanDebts { get; set; }
+        public ObservableCollection<Receipt> WellmanReceipts { get; set; }
+        public ObservableCollection<DebtItem> HaraldDebts { get; set; }
+        public ObservableCollection<Receipt> HaraldReceipts { get; set; }
+        public ObservableCollection<DebtItem> WellmanDebts { get; set; }
 
         public double ResultValue
         {
@@ -144,49 +144,49 @@ namespace WellmansAndHaraldsEconomyApp
         #endregion properties
 
         #region addremove
-        public void AddHaraldReceipt(ExpenseItem item)
+        public void AddHaraldReceipt(Receipt item)
         {
             HaraldReceipts.Add(item);
             NotifyPropertyChanged("ResultValue");
         }
 
-        public void AddHaraldDebt(ExpenseItem item)
+        public void AddHaraldDebt(DebtItem item)
         {
             HaraldDebts.Add(item);
             NotifyPropertyChanged("ResultValue");
         }
 
-        public void AddWellmanReceipt(ExpenseItem item)
+        public void AddWellmanReceipt(Receipt item)
         {
             WellmanReceipts.Add(item);
             NotifyPropertyChanged("ResultValue");
         }
 
-        public void AddWellmanDebt(ExpenseItem item)
+        public void AddWellmanDebt(DebtItem item)
         {
             WellmanDebts.Add(item);
             NotifyPropertyChanged("ResultValue");
         }
 
-        public void RemoveHaraldReceipt(ExpenseItem item)
+        public void RemoveHaraldReceipt(Receipt item)
         {
             HaraldReceipts.Remove(item);
             NotifyPropertyChanged("ResultValue");
         }
 
-        public void RemoveHaraldDebt(ExpenseItem item)
+        public void RemoveHaraldDebt(DebtItem item)
         {
             HaraldDebts.Remove(item);
             NotifyPropertyChanged("ResultValue");
         }
 
-        public void RemoveWellmanReceipt(ExpenseItem item)
+        public void RemoveWellmanReceipt(Receipt item)
         {
             WellmanReceipts.Remove(item);
             NotifyPropertyChanged("ResultValue");
         }
 
-        public void RemoveWellmanDebt(ExpenseItem item)
+        public void RemoveWellmanDebt(DebtItem item)
         {
             WellmanDebts.Remove(item);
             NotifyPropertyChanged("ResultValue");
@@ -199,15 +199,15 @@ namespace WellmansAndHaraldsEconomyApp
             var sb = new StringBuilder();
             sb.AppendFormat("[{0}-{1}]", CurrentMonth + 1, CurrentYear);
             sb.AppendLine();
-            sb.AppendFormat("Rent={0}", Rent);
+            sb.AppendFormat("Rent:{0}", Rent);
             sb.AppendLine();
-            sb.AppendFormat("HGF={0}", HGF);
+            sb.AppendFormat("HGF:{0}", HGF);
             sb.AppendLine();
-            sb.AppendFormat("Insurance={0}", Insurance);
+            sb.AppendFormat("Insurance:{0}", Insurance);
             sb.AppendLine();
-            sb.AppendFormat("Broadband={0}", Broadband);
+            sb.AppendFormat("Broadband:{0}", Broadband);
             sb.AppendLine();
-            sb.AppendFormat("Electricity={0}", Electricity);
+            sb.AppendFormat("Electricity:{0}", Electricity);
             sb.AppendLine();
             sb.AppendLine("[HaraldReceipts]");
             foreach (var item in HaraldReceipts)
@@ -218,19 +218,19 @@ namespace WellmansAndHaraldsEconomyApp
             sb.AppendLine("[HaraldDebts]");
             foreach (var item in HaraldDebts)
             {
-                sb.AppendFormat("{0}={1}", item.Description, item.DebtValue);
+                sb.AppendFormat("{0}:{1}", item.Description, item.DebtValue);
                 sb.AppendLine();
             }
             sb.AppendLine("[WellmanReceipts]");
             foreach (var item in WellmanReceipts)
             {
-                sb.AppendFormat("{0}={1}/{2}", item.Description, item.SharedValue, item.DebtValue);
+                sb.AppendFormat("{0}:{1}/{2}", item.Description, item.SharedValue, item.DebtValue);
                 sb.AppendLine();
             }
             sb.AppendLine("[WellmanDebts]");
             foreach (var item in WellmanDebts)
             {
-                sb.AppendFormat("{0}={1}", item.Description, item.DebtValue);
+                sb.AppendFormat("{0}:{1}", item.Description, item.DebtValue);
                 sb.AppendLine();
             }
             sb.AppendLine("END");
@@ -253,7 +253,7 @@ namespace WellmansAndHaraldsEconomyApp
 
                 while (!stream.EndOfStream && !line.StartsWith("["))
                 {
-                    sepIndex = line.IndexOf('=');
+                    sepIndex = line.IndexOf(':');
                     subLength2 = line.Length - sepIndex - 1;
                     if (line.StartsWith("Rent"))
                         monthData.Rent = int.Parse(line.Substring(sepIndex + 1, subLength2));
@@ -283,16 +283,16 @@ namespace WellmansAndHaraldsEconomyApp
                         switch (heading)
                         {
                             case "[HaraldReceipts]":
-                                monthData.HaraldReceipts.Add(new ExpenseItem(line));
+                                monthData.HaraldReceipts.Add(new Receipt(line));
                                 break;
                             case "[HaraldDebts]":
-                                monthData.HaraldDebts.Add(new ExpenseItem(line, true));
+                                monthData.HaraldDebts.Add(new DebtItem(line));
                                 break;
                             case "[WellmanReceipts]":
-                                monthData.WellmanReceipts.Add(new ExpenseItem(line));
+                                monthData.WellmanReceipts.Add(new Receipt(line));
                                 break;
                             case "[WellmanDebts]":
-                                monthData.WellmanDebts.Add(new ExpenseItem(line, true));
+                                monthData.WellmanDebts.Add(new DebtItem(line));
                                 break;
                         }
 

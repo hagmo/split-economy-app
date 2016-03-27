@@ -1,60 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace WellmansAndHaraldsEconomyApp
 {
-    public class ExpenseItem : INotifyPropertyChanged
+    public abstract class ExpenseItem : INotifyPropertyChanged
     {
-        public ExpenseItem()
-        {
-        }
-
-        public ExpenseItem(string expr, bool debt = false)
-        {
-            try
-            {
-                expr = expr.Trim();
-                var colonIndex = expr.IndexOf(':');
-                Description = expr.Substring(0, colonIndex);
-                var slashIndex = expr.IndexOf('/');
-                var valueString = slashIndex == -1 ? expr.Substring(colonIndex + 1) : expr.Substring(colonIndex + 1, slashIndex - colonIndex - 1);
-
-                if (!debt)
-                {
-                    SharedValue = ParseExpression(valueString);
-                }
-                else
-                {
-                    DebtValue = ParseExpression(valueString);
-                }
-
-                if (!debt && slashIndex != -1)
-                {
-                    DebtValue = ParseExpression(expr.Substring(slashIndex + 1));
-                }
-                else if (debt)
-                {
-                    ParseError = true;
-                }
-            }
-            catch
-            {
-                ParseError = true;
-            }
-            
-            if (ParseError)
-            {
-                Description = expr;
-            }
-        }
-
         public string Description { get; set; }
-        public double SharedValue { get; set; }
         public double DebtValue { get; set; }
         public bool ParseError { get; set; }
         
@@ -68,16 +19,7 @@ namespace WellmansAndHaraldsEconomyApp
             }
         }
 
-        public override string ToString()
-        {
-            if (ParseError)
-                return Description;
-            if (DebtValue > 0)
-                return string.Format("{0}: {1:0.00}/{2:0.00}", Description, SharedValue, DebtValue);
-            return string.Format("{0}: {1:0.00}", Description, SharedValue);
-        }
-
-        private static double ParseExpression(string exprString)
+        protected static double ParseExpression(string exprString)
         {
             if (string.IsNullOrEmpty(exprString)) return 0;
             exprString = exprString.Replace(" ", string.Empty);
